@@ -1,0 +1,45 @@
+!!!
+%html.no-js{lang: 'en'}
+  %head
+    %meta{charset: "utf-8"}/
+    %meta{content: 'width=device-width, initial-scale=1.0', name: 'viewport'}
+    %title= content_for?(:title) ? yield(:title) : I18n.t('brand.name')
+    %meta{content: (content_for?(:description) ? yield(:description) : I18n.t('brand.name')), name: 'description'}
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    / google webfonts
+    %link{:href => "//fonts.googleapis.com/css?family=Questrial", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "//fonts.googleapis.com/css?family=Sanchez:400italic,400", :rel => "stylesheet", :type => "text/css"}
+    %link{:rel => "stylesheet", :type => "text/css", :href => "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" }
+    
+    /[if lt IE 9]
+      = javascript_include_tag 'ie', 'data-turbolinks-track' => true
+    = javascript_include_tag 'head', 'data-turbolinks-track' => true
+    = headjs_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    = yield :head
+    = render 'layouts/airbrake'
+    :javascript
+      window.onload = authUpdateSize;
+      window.onresize = authUpdateSize;
+
+      function authUpdateSize() {
+        var h = window.innerHeight;
+        var elm = document.getElementById('authForm');
+        var nh = String(h - elm.clientHeight) / 2 + 'px';
+        document.body.style.paddingTop = nh;
+        elm.style.opacity = 1.0;
+        elm.style.filter = "alpha(opacity=100)"; 
+      }
+  %body{class: "controller__#{controller_name} action__#{action_name}"}
+    / = render 'layouts/navigation'
+    .container-fluid
+      .errors__container
+        = render 'layouts/messages'
+      = yield
+      / %footer.page__footer
+      /   - if content_for? :footer
+      /     = yield :footer
+      /   - else
+      / = render 'layouts/footer'
+    = render 'layouts/analytics'
+    = render 'layouts/javascripts'

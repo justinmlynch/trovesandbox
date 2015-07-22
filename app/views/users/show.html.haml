@@ -1,0 +1,7 @@
+%h1 User Home
+
+%p
+  You are logged in.
+
+- if user_signed_in?
+  = link_to I18n.t('auth.logout.link'), destroy_user_session_path, rel: :nofollow
