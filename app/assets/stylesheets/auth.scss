@@ -1,3 +1,155 @@
+
+
+// Minor Tweaks
+// Padding to clear fixed nav
+body.controller__sessions.action__new, 
+body.controller__registrations.action__new {
+  padding-top: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  .btn {
+    width: 100%;
+    height: 37px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.428571429;
+    border-radius: 38px;
+
+  }
+  a {
+    color: #D5605D;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 95%;
+    opacity: 0.7;
+    letter-spacing: 0.03em;
+    &:hover {
+      opacity: 1.0;
+      color: #EF7876;
+      text-decoration: none;
+    }
+  }
+  .auth__links a {
+    font-size: 100%;
+  }
+  .auth__form h5 a {
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #FFF;
+    letter-spacing: 0.05em;
+    &:hover {
+      color: #FFF;
+    }
+  }
+  .toppy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    opacity: 0.1;
+  }
+  .blurhelper {
+    position:fixed;
+    top:0;
+    left:0;
+    min-width:100%;
+    min-height:100%;
+    width:auto;
+    height:auto;
+    z-index:-101;
+    width:auto;
+    height:auto;
+    background:  #000;
+    background-size:cover;
+  }
+  video {
+    position:fixed;
+    top:50%;
+    left:50%;
+    min-width:100%;
+    min-height:100%;
+    width:auto;
+    height:auto;
+    z-index:-100;
+    -webkit-transform:translateX(-50%) translateY(-50%);
+    transform:translateX(-50%) translateY(-50%);
+    background:  url('/video/vidplaceholder.jpg') no-repeat;
+    background-size:cover;
+    -webkit-transition:1s all;
+    transition:1s all;
+      -webkit-filter: blur(15px);
+         -moz-filter: blur(15px);
+           -o-filter: blur(15px);
+          -ms-filter: blur(15px);
+              filter: blur(15px);
+  }
+  .overlay {
+    background:rgba(0,0,0,0.3);
+    background-image: url(asset-path('tactile_noise_@2X.png'));
+    //background-image: url(asset-path('debut_dark_@2X.png'));
+    // background-image: url(asset-path('classy_fabric_@2X.png'));
+    //background-image: url(asset-path('use_your_illusion_@2X.png'));
+    // background-image: url(asset-path('grid_noise_@2X.png'));
+    // background-image: url(asset-path('irongrip_@2X.png'));
+    // background-image: url(asset-path('lil_fiber_@2X.png'));
+    // background-image: url(asset-path('subtle_dots_@2X.png'));
+    // background-image: url(asset-path('subtlenet2_@2X.png'));
+    // background-image: url(asset-path('escheresque_ste_@2X.png'));
+    background-position: center;
+    opacity: 0.55;
+    width:100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 75;
+  }
+}
+
+// Make sure alerts are nicely formatted
+.alert {
+  a {
+    white-space: nowrap;
+  }
+}
+
+// Postion loading spinner at bottom right
+#nprogress .spinner {
+  bottom: 15px;
+  top: auto;
+}
+
+.navbar-form .form-group input {
+  outline: 0 !important;
+}
+
+.navbar-form .form-group input:focus {
+  outline: 0 !important;
+}
+
+button, input.form-control {
+  outline: 0 !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  &:focus {
+    outline: 0 !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.navbar-default {
+  border: 0px solid transparent;
+}
+
+
+input, input:focus, input:hover, input:active {
+  outline: 0 !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
 img.troveLogo {
   left: 50%;
   position: relative;
@@ -64,10 +216,6 @@ input.form-control {
   }
 }
 
-
-
-
-
 button, html input[type="button"], input[type="reset"], input[type="submit"] {
   -webkit-appearance: button;
   cursor: pointer;
@@ -128,12 +276,6 @@ input, input:focus, input:hover, input:active {
   background-color: #ff585b;
 
 }
-
-
-
-
-
-
 
 
 .auth__form {
@@ -272,49 +414,7 @@ body {
   background:#000
 }
 
-video {
-  position:fixed;
-  top:50%;
-  left:50%;
-  min-width:100%;
-  min-height:100%;
-  width:auto;
-  height:auto;
-  z-index:-100;
-  -webkit-transform:translateX(-50%) translateY(-50%);
-  transform:translateX(-50%) translateY(-50%);
-  background:  url('/video/vidplaceholder.jpg') no-repeat;
-  background-size:cover;
-  -webkit-transition:1s all;
-  transition:1s all;
-    -webkit-filter: blur(15px);
-       -moz-filter: blur(15px);
-         -o-filter: blur(15px);
-        -ms-filter: blur(15px);
-            filter: blur(15px);
-}
 
-.overlay {
-  background:rgba(0,0,0,0.3);
-  background-image: url(asset-path('tactile_noise_@2X.png'));
-  //background-image: url(asset-path('debut_dark_@2X.png'));
-  // background-image: url(asset-path('classy_fabric_@2X.png'));
-  //background-image: url(asset-path('use_your_illusion_@2X.png'));
-  // background-image: url(asset-path('grid_noise_@2X.png'));
-  // background-image: url(asset-path('irongrip_@2X.png'));
-  // background-image: url(asset-path('lil_fiber_@2X.png'));
-  // background-image: url(asset-path('subtle_dots_@2X.png'));
-  // background-image: url(asset-path('subtlenet2_@2X.png'));
-  // background-image: url(asset-path('escheresque_ste_@2X.png'));
-  background-position: center;
-  opacity: 0.55;
-  width:100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 75;
-}
 
 input.form-control  {
   border: 0px solid #FFF;
@@ -409,19 +509,7 @@ hr {
   bottom: 20px;
 }
 
-a {
-  color: #D5605D;
-  text-decoration: none;
-  font-weight: 400;
-  font-size: 95%;
-  opacity: 0.7;
-  letter-spacing: 0.03em;
-  &:hover {
-    opacity: 1.0;
-    color: #EF7876;
-    text-decoration: none;
-  }
-}
+
 
 .auth__form {
   margin-top: -60px;
@@ -527,6 +615,4 @@ label.bottomlinks {
 
 
 
-@media (max-width: 440px) {
-  
-}
+

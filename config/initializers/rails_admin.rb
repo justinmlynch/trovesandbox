@@ -31,7 +31,11 @@ if defined? RailsAdmin
     config.current_user_method(&:current_user)
 
     ## == Cancan ==
-    config.authorize_with :cancan
+    # config.authorize_with :cancan
+
+    config.authorize_with do
+      redirect_to main_app.root_path unless warden.user.is_admin?
+    end
 
     ## == PaperTrail ==
     # config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
@@ -129,6 +133,16 @@ if defined? RailsAdmin
 
 
     ###  User  ###
+
+    config.model "User" do
+      edit do
+        field :is_admin,   :boolean
+        field :first_name, :string
+        field :last_name,  :string
+        field :email,      :string
+        field :password,   :password
+      end
+    end
 
     # config.model 'User' do
 

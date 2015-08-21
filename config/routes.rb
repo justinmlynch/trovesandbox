@@ -28,21 +28,25 @@ Rails.application.routes.draw do
       passwords: 'users/passwords', confirmations: 'users/confirmations', unlocks: 'users/unlocks'},
     path_names: {sign_up: 'signup', sign_in: 'login', sign_out: 'logout'}
   devise_scope :user do
+    post "/a" => 'users/registrations#create'
+    get "/a" => redirect('/')
     get "#{devise_prefix}/after" => 'users/registrations#after_auth', as: 'user_root'
+    get '/' => 'users/sessions#new'
   end
-  get devise_prefix => redirect('/a/signup')
+  get devise_prefix => redirect('a/signup')
 
   # User
   resources :users, path: 'u', only: :show do
     resources :authentications, path: 'accounts'
   end
-  get '/home' => 'users#show', as: 'user_home'
 
-  # Dummy preview pages for testing.
+  # ajax
+  get '/items' => 'items#index'
+
+
+  get '/home' => 'users#show', as: 'user_home'
   get '/p/test' => 'pages#test', as: 'test'
   get '/p/email' => 'pages#email' if ENV['ALLOW_EMAIL_PREVIEW'].present?
-
   get 'robots.:format' => 'robots#index'
-
   root 'pages#home'
 end

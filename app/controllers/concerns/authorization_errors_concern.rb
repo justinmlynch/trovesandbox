@@ -15,7 +15,7 @@ module AuthorizationErrorsConcern
     reset_response
     respond_to do |format|
       format.json { render json: {status: 'error', message: message}, status: 401 }
-      format.html { redirect_to (user_signed_in? ? main_app.user_home_path : main_app.root_path), alert: message }
+      format.html { redirect_to (user_signed_in? ? main_app.user_home_path : main_app.new_user_session_path), alert: message }
     end
   end
 end

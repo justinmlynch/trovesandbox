@@ -22,9 +22,15 @@
 #= require refills/parallax
 #= require vendor/isotope
 #= require vendor/packery
+#= require vendor/underscore
+#= require vendor/backbone
+#= require vendor/handlebars
 
 
 # Add error class to .avatar images if they fail to load
 # See avatar.scss and _avatar.html.haml
 #= require imagesloaded
 #= require avatar.errors
+
+
+

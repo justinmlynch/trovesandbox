@@ -1,73 +1,101 @@
--# This view is the heart of the registration page...
--# Multiple actions render this view
-
--# States:
--#    User has connected an auth provider but has not yet completed registration
--#    User has clicked on the Sign up link
--#    User submitted registration form but there was an error
-
-- if resource.email.present?
-  - login_link = link_to I18n.t('auth.login.link'), add_to_url(new_user_session_path, email: resource.email)
-- else
-  - login_link = link_to I18n.t('auth.login.link'), new_user_session_path
+- resource.email = params[:email] unless resource.email.present?
 
 - if @failed
   = render 'users/registrations/failed', provider: @provider
+- if @existing_account
+  .alert.alert-warning
+    = I18n.t('auth.signup.email_taken', login_link: I18n.t('auth.login.link')).html_safe
 
 .auth__form#authForm
   = image_tag "troveLogo.svg", :class => "troveLogo"
-  - unless @auth
-    %h5.title= I18n.t('auth.signup.help', login_link: login_link).html_safe
+  .tab-content
 
-    / = render 'authentications/providers', flow: 'signup', icons: true, color: true
-    / .auth__or
-    /   %hr/
-    /   %span or
+    // Login Form Tab
+    #login.login-tab.tab-pane.fade{:role => "tabpanel"}
+      = simple_form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+        %input{ style: 'display:none', type: 'text', name: 'fakeusernameremembered' } 
+        %input{ style: 'display:none', type: 'password', name: 'fakepasswordremembered' } 
+        = f.input_field :email,           required: true, placeholder: 'Email',    type: 'text',     autocomplete: 'off', class: 'form-control t', spellcheck: 'false'
+        = f.input_field :password,        required: true, placeholder: 'Password', type: 'password', autocomplete: 'off', class: 'form-control b' 
+        = f.button :submit, I18n.t('auth.login.link'), class: 'btn-primary'
+      %h5.title 
+        Need an account? 
+        %a{"aria-controls" => "signup", "data-toggle" => "tab", :href => "#signup", :role => "tab"}= I18n.t('auth.signup.link')
+      .auth__links
+        %label.bottomlinks= I18n.t 'auth.links.title'
+        %br
+        %a{"aria-controls" => "forgot", "data-toggle" => "tab", :href => "#forgot", :role => "tab"}= I18n.t('auth.forgot.link')
+        %br
+        %a{"aria-controls" => "confirm", "data-toggle" => "tab", :href => "#confirm", :role => "tab"}= I18n.t('auth.confirm.link')
+        %br
+        %a{"aria-controls" => "unlock", "data-toggle" => "tab", :href => "#unlock", :role => "tab"}= I18n.t('auth.unlock.link')
 
-  - else # @auth
-    %h2
-      = render 'users/avatar', size: :thumb, user: @auth
-      Hi,
-      = @auth.display_name
-    %p
-      Not you?
-      = link_to 'Reset', destroy_user_session_path, rel: :nofollow, class: 'btn btn-default btn-xs'
+    // Signup Form Tab
+    #signup.signup-tab.tab-pane.fade.in.active{:role => "tabpanel"}
+      = simple_form_for resource, as: resource_name, url: registration_path(resource_name), method: :post do |f|
+        %input{ style: 'display:none', type: 'text', name: 'fakeusernameremembered', autocomplete: 'off', } 
+        %input{ style: 'display:none', type: 'password', name: 'fakepasswordremembered', autocomplete: 'off', } 
+        = f.input_field :first_name,    required: true, placeholder: 'First',    type: 'text',      autocomplete: 'off', class: 'form-control tl',  spellcheck: 'false'
+        = f.input_field :last_name,     required: true, placeholder: 'Last',     type: 'text',      autocomplete: 'off', class: 'form-control tr',  spellcheck: 'false'  
+        = f.input_field :email,        required: true, placeholder: 'Email',    type: 'email',     autocomplete: 'off', class: 'form-control m',   spellcheck: 'false'
+        = f.input_field :password,     required: true, placeholder: 'Password', type: 'password',  autocomplete: 'off', class: 'form-control b' 
+        = f.button :submit, I18n.t('auth.signup.link'), class: 'btn-primary'
+      %h5.title 
+        Already have an account? 
+        %a{'aria-controls' => 'login', 'data-toggle' => 'tab', :href => '#login', :role => 'tab'}= I18n.t('auth.login.link')
+      .auth__links
+        By signing up, you agree to the
+        = link_to 'Terms', terms_path
+        and
+        = link_to 'Privacy', privacy_path
 
-    - unless @existing_account
-      %p
-        We filled in some of your details from
-        = succeed '.' do
-          = @auth.provider_name
-        Please confirm and sign up.
+    // Forgot Password Tab
+    #forgot.forgot-tab.tab-pane.fade
+      %h5.title
+        = I18n.t('auth.forgot.helplink')
+      = simple_form_for resource, as: resource_name, url: password_path(resource_name), method: :post do |f|
+        = f.input_field :email, autofocus: true, required: true, placeholder: 'Email',    type: 'email',     autocomplete: 'off', class: 'form-control o',   spellcheck: 'false'
+        = f.button :submit, I18n.t('auth.forgot.submit'), class: 'btn-primary'
+      %h5.title 
+        %a.ion.ion-close-circled{'aria-controls' => 'login', 'data-toggle' => 'tab', :href => '#login', :role => 'tab'}
 
-  - if @existing_account
-    -if provider = @existing_account.authentications.first.try(:provider)
-      - url = provider_auth_path(provider, flow: 'login')
-      - login_with_link = link_to I18n.t('auth.login.link_with', provider: Authentication.provider_name(provider)), url
-    - else
-      - login_with_link = login_link
-    .alert.alert-warning
-      = I18n.t('auth.signup.email_taken', login_link: login_with_link).html_safe
+    // Confirm Account Tab
+    #confirm.confirm-tab.tab-pane.fade
+      %h5.title
+        = I18n.t('auth.confirm.helplink')
+      = simple_form_for resource, as: resource_name, url: confirmation_path(resource_name), method: :post do |f|
+        = f.input_field :email, autofocus: true, required: true, placeholder: 'Email',    type: 'email',     autocomplete: 'off', class: 'form-control o',   spellcheck: 'false'
+        = f.button :submit, I18n.t('auth.confirm.submit'), class: 'btn-primary'
+      %h5.title 
+        %a.ion.ion-close-circled{'aria-controls' => 'login', 'data-toggle' => 'tab', :href => '#login', :role => 'tab'}
 
-  = render 'users/registrations/form', hide_password: @auth.present?
-
-  .auth__links
-    By signing up, you agree to the
-    = link_to 'Terms', terms_path
-    and
-    = succeed '.' do
-      = link_to 'Privacy', privacy_path
-
-  = render 'users/social/facepile'
+    // Unlock Account Tab
+    #unlock.unlock-tab.tab-pane.fade
+      %h5.title
+        = I18n.t('auth.unlock.helplink')
+      = simple_form_for resource, as: resource_name, url: unlock_path(resource_name), method: :post do |f|
+        = f.input_field :email, autofocus: true, required: true, placeholder: 'Email',    type: 'email',     autocomplete: 'off', class: 'form-control o',   spellcheck: 'false'
+        = f.button :submit, I18n.t('auth.unlock.submit'), class: 'btn-primary'
+      %h5.title 
+        %a.ion.ion-close-circled{'aria-controls' => 'login', 'data-toggle' => 'tab', :href => '#login', :role => 'tab'}
 
 - content_for :on_ready do
-  / $('input[name="user[email]"]').on('click keydown', function(){$(this).closest('form').find('.collapse').addClass('in')});
-
-
+  function authUpdateSize() { var h = window.innerHeight; var elm = document.getElementById('authForm'); var nh = String(h - elm.clientHeight) / 2 + 'px'; document.body.style.paddingTop = nh; }
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) { authUpdateSize(); });
+  window.onload = authUpdateSize;
+  window.onresize = authUpdateSize;
+  function authUpdateSize() {
+  var h = window.innerHeight;
+  var elm = document.getElementById('authForm');
+  var nh = String(h - elm.clientHeight) / 2 + 'px';
+  document.body.style.paddingTop = nh;
+  elm.style.opacity = 1.0;
+  elm.style.filter = "alpha(opacity=100)"; 
+  }
 
 %video#bgvid{:autoplay => "", :loop => "", :poster => "/video/vidplaceholder.jpg" }
   %source{:src => "https://s3.amazonaws.com/trove-vids/citylights.webm", :type => "video/webm"}
   %source{:src => "https://s3.amazonaws.com/trove-vids/citylights.mp4", :type => "video/mp4"}
 .overlay
-
 = render 'users/js/threemesh'
+

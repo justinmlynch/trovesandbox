@@ -1,13 +1,13 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   include DeviseReturnToConcern
-
+  
   before_action :set_vars
   before_action :permit_params, only: [:create, :update]
   after_action :cleanup_oauth, only: [:create, :update]
 
   # Additional resource fields to permit
   # Devise already permits email, password, etc.
-  SANITIZED_PARAMS = [:first_name, :last_name].freeze
+  SANITIZED_PARAMS = [:first_name, :last_name, :firstname, :lastname].freeze
 
   # GET /resource/sign_up
   def new
@@ -31,7 +31,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     # User will already be signed in if using username/password sign up
     if !signed_in? && @auth.blank?
       # redirect_to new_user_registration_path
-      redirect_to new_user_session_path
+      # redirect_to new_user_registration_path
+      # redirect_to new_user_session_path
+      render "users/sessions/new"
 
     # Check if resource is valid
     # Resource will not yet be saved if user is signing up with OAuth

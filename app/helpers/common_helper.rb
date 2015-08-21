@@ -4,6 +4,19 @@ module CommonHelper
   include GuidHelper
   include OauthHelper
 
+
+  def resource_name
+    :user
+  end
+
+  def resource
+    @resource ||= User.new
+  end
+
+  def devise_mapping
+    @devise_mapping ||= Devise.mappings[:user]
+  end
+
   # Check if resource has a specific error.
   #
   # Requires I18n::Backend::Metadata is enabled.

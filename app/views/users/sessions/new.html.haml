@@ -32,7 +32,7 @@
 
     // Signup Form Tab
     #signup.signup-tab.tab-pane.fade{:role => "tabpanel"}
-      = simple_form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
+      = simple_form_for resource, as: resource_name, url: registration_path(resource_name), method: :post do |f|
         %input{ style: 'display:none', type: 'text', name: 'fakeusernameremembered', autocomplete: 'off', } 
         %input{ style: 'display:none', type: 'password', name: 'fakepasswordremembered', autocomplete: 'off', } 
         = f.input_field :first_name,    required: true, placeholder: 'First',    type: 'text',      autocomplete: 'off', class: 'form-control tl',  spellcheck: 'false'
@@ -82,13 +82,23 @@
 - content_for :on_ready do
   function authUpdateSize() { var h = window.innerHeight; var elm = document.getElementById('authForm'); var nh = String(h - elm.clientHeight) / 2 + 'px'; document.body.style.paddingTop = nh; }
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) { authUpdateSize(); });
-
-%video#bgvid{:autoplay => "", :loop => "", :poster => "/video/vidplaceholder.jpg" }
-  %source{:src => "https://s3.amazonaws.com/trove-vids/citylights.webm", :type => "video/webm"}
-  %source{:src => "https://s3.amazonaws.com/trove-vids/citylights.mp4", :type => "video/mp4"}
-.overlay
-/ %source{:src => "http://d2434a0nr1d7t1.cloudfront.net/p/D252_9_020/D252_9_020_detail.mp4", :type => "video/mp4"}
-/ %source{:src => "http://d2434a0nr1d7t1.cloudfront.net/p/D95_4_105/D95_4_105_detail.mp4", :type => "video/mp4"}
-/ %source{:src => "http://d2434a0nr1d7t1.cloudfront.net/p/D485_4_754/D485_4_754_detail.mp4", :type => "video/mp4"}
-= render 'users/js/threemesh'
+  window.onload = authUpdateSize;
+  window.onresize = authUpdateSize;
+  function authUpdateSize() {
+  var h = window.innerHeight;
+  var elm = document.getElementById('authForm');
+  var nh = String(h - elm.clientHeight) / 2 + 'px';
+  document.body.style.paddingTop = nh;
+  elm.style.opacity = 1.0;
+  elm.style.filter = "alpha(opacity=100)"; 
+  }
+.blurhelper
+  %video#bgvid{:autoplay => "", :loop => "", :poster => "/video/vidplaceholder.jpg" }
+    %source{:src => "https://s3.amazonaws.com/trove-vids/citylights.webm", :type => "video/webm"}
+    %source{:src => "https://s3.amazonaws.com/trove-vids/citylights.mp4", :type => "video/mp4"}
+  .overlay
+  / %source{:src => "http://d2434a0nr1d7t1.cloudfront.net/p/D252_9_020/D252_9_020_detail.mp4", :type => "video/mp4"}
+  / %source{:src => "http://d2434a0nr1d7t1.cloudfront.net/p/D95_4_105/D95_4_105_detail.mp4", :type => "video/mp4"}
+  / %source{:src => "http://d2434a0nr1d7t1.cloudfront.net/p/D485_4_754/D485_4_754_detail.mp4", :type => "video/mp4"}
+  = render 'users/js/threemesh'
 
